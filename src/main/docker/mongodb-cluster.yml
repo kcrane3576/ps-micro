@@ -1,0 +1,16 @@
+version: '2'
+services:
+    psmicro-mongodb:
+        image: mongo:3.4.8
+        ports:
+            - "27017:27017"
+        command: mongos --configdb psmicro-mongodb-config
+    psmicro-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    psmicro-mongodb-config:
+        image: mongo:3.4.8
+        container_name: psmicro-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
